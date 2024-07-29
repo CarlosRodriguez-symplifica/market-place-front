@@ -1,8 +1,8 @@
 <template>
   <div class="page-container">
     <img class="left-aligned-image" alt="Maerket Place App Logo" src="./assets/logo.png">
+    <filterByName />
     <div class="container">
-      <filterByName />
       <listProducts />
     </div>
   </div>
@@ -47,7 +47,7 @@ export default {
   .container {
     width: auto;
     max-width: 90%;
-    margin: 5rem;
+    margin: 5rem auto;
   }
   .product_img {
     width: 100%;

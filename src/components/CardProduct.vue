@@ -25,7 +25,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import exampleImage from '@/assets/not_found.jpg'
+import exampleImage from '@/assets/no_imag.jpg'
 
 export default {
     props: ['product'],

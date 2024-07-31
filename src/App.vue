@@ -1,5 +1,8 @@
 <template>
   <div class="page-container">
+    <Register />
+    <Login />
+    <CreateProduct />
     <img class="left-aligned-image" alt="Maerket Place App Logo" src="./assets/logo.png">
     <filterByName />
     <div class="container">
@@ -9,19 +12,26 @@
 </template>
 
 <script>
+import Register from '@/components/Register'
+import Login from '@/components/Login'
+import CreateProduct from './components/CreateProduct.vue'
 import ListProducts from '@/components/ListProducts'
 import FilterByName from '@/components/FilterByName'
 
 export default {
   name: 'App',
   components: {
+    Register,
+    Login,
+    CreateProduct,
     ListProducts,
     FilterByName
   }
 }
 </script>
 
-<style lang="scss">
+<style
+    CreateProductlang="scss">
   :root {
     --background-body: #CFCFCF;
     --background-card: #3C3E44;

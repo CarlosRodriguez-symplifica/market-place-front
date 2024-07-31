@@ -25,7 +25,7 @@ export default createStore({
   actions: {
     async getProducts({commit}) {
       try {
-        const response = await fetch('http://localhost:3000/api/v1/products')
+        const response = await fetch('https://market-place-app-xa82.onrender.com/api/v1/products')
         const data = await response.json()
         commit('setProducts', data.data)
         commit('setProductsFilter', data.data)

@@ -11,7 +11,7 @@
           <label for="password">Contraseña:</label>
           <input type="password" id="password" v-model="password" required />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit">Iniciar Sesion</button>
       </form>
     </div>
   </div>
@@ -20,19 +20,25 @@
 <script>
 import { ref } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 export default {
   setup() {
     const store = useStore()
+    const router = useRouter()
     const email = ref('')
     const password = ref('')
 
-    const login = () => {
+    const login = async () => {
       const payload = {
         email: email.value,
         password: password.value
       }
-      store.dispatch('loginUser', payload)
+      const response = await store.dispatch('loginUser', payload)
+
+      if (response.success) {
+        router.push('/')
+      }
     }
 
     return {

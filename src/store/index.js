@@ -6,12 +6,14 @@ export default createStore({
     productsFilter: [],
     users: [],
     flashMessage: null,
-    token: null
+    token: localStorage.getItem('token') || null
   },
   getters: {
     getUserById: (state) => (id) => {
       return state.users.find(user => user.id === id)
-    }
+    },
+    isAuthenticated: (state) => !!state.token,
+    flashMessage: (state) => state.flashMessage
   },
   mutations: {
     setProducts(state, payload) {
@@ -28,6 +30,11 @@ export default createStore({
     },
     setToken(state, token) {
       state.token = token
+      localStorage.setItem('token', token)
+    },
+    removeToken(state) {
+      state.token = null
+      localStorage.removeItem('token')
     }
   },
   actions: {
@@ -48,9 +55,7 @@ export default createStore({
       const results = state.products.filter((product) => {
         const productName = product.attributes.title.toLowerCase()
 
-        if(productName.includes(formatName)) {
-          return product
-        }
+        return productName.includes(formatName)
       })
       commit('setProductsFilter', results)
     },
@@ -72,7 +77,6 @@ export default createStore({
 
         if (response.ok) {
           commit('setFlashMessage', { message: 'Registro exitoso...', type: 'success' })
-          commit('setUsers', [...this.state.users, data])
           return { success: true }
         } else {
           commit('setFlashMessage', { message: data.email[0] || 'Error en el registro', type: 'error' })
@@ -99,14 +103,29 @@ export default createStore({
           })
         })
         const data = await response.json()
-        commit('setToken', data.token)
+
+        if (response.ok) {
+          commit('setToken', data.token)
+          commit('setFlashMessage', { message: 'Inicio de sesión exitoso', type: 'success' })
+          return { success: true }
+        } else {
+          console.log('entro aqui')
+          commit('setFlashMessage', { message: 'Error en el inicio de sesión', type: 'error' })
+          return { success: false }
+        }
       } catch (error) {
         console.log(error)
+        commit('setFlashMessage', { message: 'Error en la solicitud', type: 'error' })
+        return { success: false }
       }
     },
-    async createProductAction({ commit }, { product, token }) {
+    logout({ commit }) {
+      commit('removeToken')
+      commit('setFlashMessage', { message: 'Sesión cerrada', type: 'success' })
+    },
+    async createProductAction({ commit, state }, { product, token }) {
       try {
-        const response = fetch('https://market-place-app-xa82.onrender.com/api/v1/products', {
+        const response = await fetch('https://market-place-app-xa82.onrender.com/api/v1/products', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -115,9 +134,17 @@ export default createStore({
           body: JSON.stringify({ product })
         })
         const data = await response.json()
-        commit('setProduct', [...this.state.products, data])
+        console.log(response)
+        console.log(data)
+        if (response.ok) {
+          commit('setProducts', [...state.products, data])
+          commit('setFlashMessage', { message: 'Producto creado exitosamente', type: 'success' })
+        } else {
+          commit('setFlashMessage', { message: 'Error al crear el producto', type: 'error' })
+        }
       } catch (error) {
-        console.log(error)
+        console.log('Error al crear el producto:', error)
+        commit('setFlashMessage', { message: 'Error en la solicitud', type: 'error' })
       }
     }
   },

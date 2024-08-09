@@ -2,17 +2,43 @@
   <nav>
     <img class="left-aligned-image" alt="Maerket Place App Logo" src="./assets/logo.png">
     <div class="nav-links">
-      <router-link to="/">Inicio</router-link> |
-      <router-link to="/register">Registrarse</router-link> |
-      <router-link to="/login">Login</router-link>
+      <router-link to="/">Inicio</router-link>
+      <router-link v-if="!isAuthenticated" to="/register">Registrarse</router-link>
+      <router-link v-if="!isAuthenticated" to="/login">Login</router-link>
+      <router-link v-if="isAuthenticated" to="/create-product">Crear Producto</router-link>
+      <button v-if="isAuthenticated" @click="logoutAndRedirect">Cerrar Sesion</button>
     </div>
   </nav>
   <router-view />
 </template>
 
 <script>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+
 export default {
   name: 'App',
+  setup() {
+    const store = useStore()
+    const router = useRouter()
+
+    const isAuthenticated = computed(() => store.getters.isAuthenticated)
+
+    const logoutAndRedirect = async () => {
+      try {
+        await store.dispatch('logout')
+        router.push('/')
+      } catch (error) {
+        console.error('Error during logout:', error)
+      }
+    }
+
+    return {
+      isAuthenticated,
+      logoutAndRedirect
+    }
+  }
 }
 </script>
 

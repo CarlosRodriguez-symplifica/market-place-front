@@ -1,50 +1,31 @@
 <template>
-  <div v-if="flashMessage" :class="['flash-card', flashMessage.type]">
-    {{ flashMessage.message }}
-  </div>
-  <div class="page-container">
-    <CreateProduct />
-    <filterByName />
-    <div class="container">
-      <listProducts />
+  <div>
+    <div v-if="flashMessage" :class="['flash-card', flashMessage.type]">
+      {{ flashMessage.message }}
+    </div>
+    <div class="page-container">
+      <filterByName />
+      <div class="container">
+        <listProducts />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import CreateProduct from '@/components/CreateProduct'
+import { mapState } from 'vuex'
 import ListProducts from '@/components/ListProducts'
 import FilterByName from '@/components/FilterByName'
-import { ref, onMounted } from 'vue'
 
 export default {
   name: 'Home',
   components: {
-    CreateProduct,
     ListProducts,
     FilterByName
   },
-  setup() {
-    const flashMessage = ref(null)
-
-    onMounted(() => {
-      const query = window.location.search
-      const params = new URLSearchParams(query)
-      const message = params.get('message')
-      const type = params.get('type')
-
-      if (message && type) {
-        flashMessage.value = { message, type}
-
-        setTimeout(() => {
-          flashMessage.value = null
-        }, 4000)
-      }
-    })
-    return {
-      flashMessage
-    }
-  }
+  computed: {
+    ...mapState(['flashMessage'])
+  },
 }
 </script>
 

@@ -5,6 +5,7 @@ export default createStore({
     products: [],
     productsFilter: [],
     users: [],
+    flashMessage: null,
     token: null
   },
   getters: {
@@ -21,6 +22,9 @@ export default createStore({
     },
     setUsers(state, payload) {
       state.users = payload
+    },
+    setFlashMessage(state, { message, type }) {
+      state.flashMessage = { message, type }
     },
     setToken(state, token) {
       state.token = token
@@ -63,11 +67,21 @@ export default createStore({
               password: payload.password
             }
           })
-        })
-        const data = await response.json()
-        commit('setUsers', [...this.state.users, data])
+        });
+        const data = await response.json();
+
+        if (response.ok) {
+          commit('setFlashMessage', { message: 'Registro exitoso...', type: 'success' })
+          commit('setUsers', [...this.state.users, data])
+          return { success: true }
+        } else {
+          commit('setFlashMessage', { message: data.email[0] || 'Error en el registro', type: 'error' })
+          return { success: false }
+        }
       } catch (error) {
-        console.log(error)
+        console.error('Error al registrar:', error)
+        commit('setFlashMessage', { message: 'Error en la solicitud', type: 'error' })
+        return { success: false }
       }
     },
     async loginUser({ commit }, payload) {

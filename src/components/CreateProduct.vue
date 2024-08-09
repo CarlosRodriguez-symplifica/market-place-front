@@ -1,59 +1,59 @@
 <template>
-    <div class="create-product">
-      <h2>Crear Producto</h2>
-      <form @submit.prevent="createProduct">
-        <div>
-          <label for="title">Título:</label>
-          <input type="text" id="title" v-model="title" required />
-        </div>
-        <div>
-          <label for="price">Precio:</label>
-          <input type="number" id="price" v-model="price" required />
-        </div>
-        <div>
-          <label for="published">Publicado:</label>
-          <input type="checkbox" id="published" v-model="published" />
-        </div>
-        <div>
-          <label for="quantity">Cantidad:</label>
-          <input type="number" id="quantity" v-model="quantity" required />
-        </div>
-        <button type="submit">Crear Producto</button>
-      </form>
-    </div>
-  </template>
+  <div class="create-product">
+    <h2>Nuevo Producto</h2>
+    <form @submit.prevent="createProduct">
+      <div>
+        <label for="title">Título:</label>
+        <input type="text" id="title" v-model="title" required />
+      </div>
+      <div>
+        <label for="price">Precio:</label>
+        <input type="number" id="price" v-model="price" required />
+      </div>
+      <div>
+        <label for="published">Publicado:</label>
+        <input type="checkbox" id="published" v-model="published" />
+      </div>
+      <div>
+        <label for="quantity">Cantidad:</label>
+        <input type="number" id="quantity" v-model="quantity" required />
+      </div>
+      <button type="submit">Crear Producto</button>
+    </form>
+  </div>
+</template>
 
-  <script>
-  import { mapActions, mapState } from 'vuex'
+<script>
+import { mapActions, mapState } from 'vuex'
 
-  export default {
-    data() {
-      return {
-        title: '',
-        price: '',
-        published: false,
-        quantity: 0
+export default {
+  data() {
+    return {
+      title: '',
+      price: '',
+      published: false,
+      quantity: ''
+    }
+  },
+  computed: {
+    ...mapState(['token'])
+  },
+  methods: {
+    ...mapActions(['createProductAction']),
+    createProduct() {
+      const product = {
+        title: this.title,
+        price: this.price,
+        published: this.published,
+        quantity: this.quantity
       }
-    },
-    computed: {
-      ...mapState(['token'])
-    },
-    methods: {
-      ...mapActions(['createProductAction']),
-      createProduct() {
-        const product = {
-          title: this.title,
-          price: this.price,
-          published: this.published,
-          quantity: this.quantity
-        }
-        this.createProductAction({ product, token: this.token })
-      }
+      this.createProductAction({ product, token: this.token })
     }
   }
-  </script>
+}
+</script>
 
-  <style scoped>
+<style scoped>
   .create-product {
     max-width: 400px;
     margin: 0 auto;
@@ -61,6 +61,7 @@
     background: #f5f5f5;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: var(--text-orange);
   }
   .create-product h2 {
     margin-bottom: 1rem;
@@ -89,6 +90,6 @@
     cursor: pointer;
   }
   .create-product button:hover {
-    background: #0056b3;
+    background: var(--text-orange);
   }
-  </style>
+</style>

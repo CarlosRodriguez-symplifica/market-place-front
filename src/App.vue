@@ -1,32 +1,18 @@
 <template>
-  <div class="page-container">
-    <Register />
-    <Login />
-    <CreateProduct />
+  <nav>
     <img class="left-aligned-image" alt="Maerket Place App Logo" src="./assets/logo.png">
-    <filterByName />
-    <div class="container">
-      <listProducts />
+    <div class="nav-links">
+      <router-link to="/">Inicio</router-link> |
+      <router-link to="/register">Registrarse</router-link> |
+      <router-link to="/login">Login</router-link>
     </div>
-  </div>
+  </nav>
+  <router-view />
 </template>
 
 <script>
-import Register from '@/components/Register'
-import Login from '@/components/Login'
-import CreateProduct from './components/CreateProduct.vue'
-import ListProducts from '@/components/ListProducts'
-import FilterByName from '@/components/FilterByName'
-
 export default {
   name: 'App',
-  components: {
-    Register,
-    Login,
-    CreateProduct,
-    ListProducts,
-    FilterByName
-  }
 }
 </script>
 
@@ -34,6 +20,7 @@ export default {
     CreateProductlang="scss">
   :root {
     --background-body: #CFCFCF;
+    --background-navbar: #f0f0f0;
     --background-card: #3C3E44;
     --background-card-shadown: #5b5b5b;
     --text-white: #FFFFFF;
@@ -50,28 +37,35 @@ export default {
     color: var(--text-white);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
-  h1 {
-    margin-bottom: 3rem;
-    text-align: center;
-  }
-  .container {
-    width: auto;
-    max-width: 90%;
-    margin: 5rem auto;
-  }
-  .product_img {
-    width: 100%;
-  }
-  .page-container {
+  nav {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    height: 100vh;
-    padding: 20px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--background-navbar);
+    padding: 10px;
+  }
+  nav a {
+    font-weight: bold;
+    color: #3C3839;
+    text-decoration: none;
+    margin: 0 5px;
+  }
+  nav a.router-link-exact-active {
+    color: var(--text-orange);
   }
   .left-aligned-image {
-    max-width: 100%;
+    max-width: 150px;
     height: auto;
+  }
+  .nav-links {
+    display: flex;
+    gap: 10px;
+  }
+  .app-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    background-color: var(--background-body);
   }
 </style>

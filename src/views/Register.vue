@@ -14,7 +14,7 @@
           <label for="password">Contraseña:</label>
           <input type="password" id="password" v-model="password" required />
         </div>
-        <button type="submit">Register</button>
+        <button type="submit">Registrarse</button>
       </form>
     </div>
   </div>

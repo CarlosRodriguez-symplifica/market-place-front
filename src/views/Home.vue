@@ -20,7 +20,7 @@ import { ref, onMounted } from 'vue'
 export default {
   name: 'Home',
   components: {
-    // CreateProduct,
+    CreateProduct,
     ListProducts,
     FilterByName
   },

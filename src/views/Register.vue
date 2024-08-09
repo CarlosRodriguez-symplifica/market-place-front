@@ -4,14 +4,14 @@
   </div>
   <div class="app-container">
     <div class="register">
-      <h2>Registrarte</h2>
+      <h2>Registrate</h2>
       <form @submit.prevent="register">
         <div>
           <label for="email">Email:</label>
           <input type="email" id="email" v-model="email" required />
         </div>
         <div>
-          <label for="password">Password:</label>
+          <label for="password">Contraseña:</label>
           <input type="password" id="password" v-model="password" required />
         </div>
         <button type="submit">Register</button>

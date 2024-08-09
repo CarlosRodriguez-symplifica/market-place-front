@@ -3,7 +3,7 @@
     {{ flashMessage.message }}
   </div>
   <div class="page-container">
-    <!-- <CreateProduct /> -->
+    <CreateProduct />
     <filterByName />
     <div class="container">
       <listProducts />
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-// import CreateProduct from '@/components/CreateProduct'
+import CreateProduct from '@/components/CreateProduct'
 import ListProducts from '@/components/ListProducts'
 import FilterByName from '@/components/FilterByName'
 import { ref, onMounted } from 'vue'

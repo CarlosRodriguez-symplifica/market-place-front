@@ -1,39 +1,41 @@
 <template>
   <div class="product">
-    <img class="product_img" :src="imageSrc" :alt="product.attributes.title">
-    <div class="product__info">
-      <div v-if="product.attributes.published === true">
-        <h3>{{ product.attributes.title }}</h3>
-        <div class="price">
-          <span
-          :class="
-            product.attributes.quantity == 0 ? 'no_stock' : 'in_stock'"
-          ></span>
-          <span>precio: {{ product.attributes.price }}</span>
+    <router-link :to="`/product/${product.id}`" class="product__link">
+      <img class="product_img" :src="imageSrc" :alt="product.attributes.title">
+      <div class="product__info">
+        <div v-if="product.attributes.published === true">
+          <h3>{{ product.attributes.title }}</h3>
+          <div class="price">
+            <span
+            :class="
+              product.attributes.quantity == 0 ? 'no_stock' : 'in_stock'"
+            ></span>
+            <span>precio: {{ product.attributes.price }}</span>
+          </div>
+          <div class="stock">
+            <span>
+              Cantidad en bodega:
+              <template v-if="product.attributes.quantity === 0">
+                Sin stock en bodega
+              </template>
+              <template v-else>
+                {{ product.attributes.quantity }}
+                {{ product.attributes.quantity === 1 ? 'unidad' : 'unidades' }}
+              </template>
+            </span>
+          </div>
+          <div class="owner">
+            <span>
+              Quien lo vende:
+              {{ ownerEmail }}
+            </span>
+          </div>
         </div>
-        <div class="stock">
-          <span>
-            Cantidad en bodega:
-            <template v-if="product.attributes.quantity === 0">
-              Sin stock en bodega
-            </template>
-            <template v-else>
-              {{ product.attributes.quantity }}
-              {{ product.attributes.quantity === 1 ? 'unidad' : 'unidades' }}
-            </template>
-          </span>
-        </div>
-        <div class="owner">
-          <span>
-            Quien lo vende:
-            {{ ownerEmail }}
-          </span>
+        <div v-else class="product__info">
+          <h3>¡Nuevo Producto en Camino!</h3>
         </div>
       </div>
-      <div v-else class="product__info">
-        <h3>¡Nuevo Producto en Camino!</h3>
-      </div>
-    </div>
+    </router-link>
   </div>
 </template>
 
@@ -112,5 +114,9 @@ export default {
   }
   .product_img {
     width: 100%;
+  }
+  .product__link {
+    text-decoration: none;
+    color: inherit;
   }
 </style>

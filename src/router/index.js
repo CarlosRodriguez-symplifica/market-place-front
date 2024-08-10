@@ -3,6 +3,7 @@ import Login from "@/views/Login";
 import Register from "@/views/Register";
 import Home from "@/views/Home";
 import CreateProduct from "@/views/CreateProduct";
+import ProductDetail from "@/views/ProductDetail";
 
 const routes = [
     {
@@ -24,6 +25,12 @@ const routes = [
         path: '/create-product',
         name: 'CreateProduct',
         component: CreateProduct
+    },
+    {
+        path: '/product/:id',
+        name: 'ProductDetail',
+        component: ProductDetail,
+        props: true
     }
 ]
 

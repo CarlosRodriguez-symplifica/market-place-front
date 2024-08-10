@@ -3,6 +3,7 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     products: [],
+    currentProduct: null,
     productsFilter: [],
     users: [],
     flashMessage: null,
@@ -18,6 +19,9 @@ export default createStore({
   mutations: {
     setProducts(state, payload) {
       state.products = payload
+    },
+    setCurrentProduct(state, product) {
+      state.currentProduct = product
     },
     setProductsFilter(state, payload) {
       state.productsFilter = payload
@@ -53,6 +57,17 @@ export default createStore({
         commit('setUsers', data.included)
       } catch (error) {
         console.error(error)
+      }
+    },
+    async fetchProductById({ commit }, id) {
+      try {
+        const response = await fetch(`${process.env.VUE_APP_MARKET_PLACE_APP_API_URL}/products/${id}`)
+        const data = await response.json()
+
+        commit('setCurrentProduct', data.data.attributes)
+      } catch (error) {
+        console.log('Error al obtener el producto:', error)
+        commit('setFlashMessage', { message: 'Error en la solicitud', type: 'error' })
       }
     },
     filterByName({ commit, state }, name) {

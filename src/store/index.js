@@ -46,7 +46,7 @@ export default createStore({
   actions: {
     async getProducts({ commit }) {
       try {
-        const response = await fetch(`${process.env.MARKET_PLACE_APP_API_URL}/products`)
+        const response = await fetch(`${process.env.VUE_APP_MARKET_PLACE_APP_API_URL}/products`)
         const data = await response.json()
         commit('setProducts', data.data)
         commit('setProductsFilter', data.data)

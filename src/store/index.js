@@ -46,7 +46,7 @@ export default createStore({
   actions: {
     async getProducts({ commit }) {
       try {
-        const response = await fetch('http://localhost:3001/api/v1/products')
+        const response = await fetch(`${process.env.MARKET_PLACE_APP_API_URL}/products`)
         const data = await response.json()
         commit('setProducts', data.data)
         commit('setProductsFilter', data.data)
@@ -67,7 +67,7 @@ export default createStore({
     },
     async registerUser({ commit }, payload) {
       try {
-        const response = await fetch('http://localhost:3001/api/v1/users', {
+        const response = await fetch(`${process.env.MARKET_PLACE_APP_API_URL}/users`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -96,7 +96,7 @@ export default createStore({
     },
     async loginUser({ commit }, payload) {
       try {
-        const response = await fetch('http://localhost:3001/api/v1/tokens', {
+        const response = await fetch(`${process.env.MARKET_PLACE_APP_API_URL}/tokens`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -152,7 +152,7 @@ export default createStore({
     },
     async createProductAction({ commit, state }, { product, token }) {
       try {
-        const response = await fetch('http://localhost:3001/api/v1/products', {
+        const response = await fetch(`${process.env.MARKET_PLACE_APP_API_URL}/products`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

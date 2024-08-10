@@ -4,7 +4,7 @@
       <h2>Nuevo Producto</h2>
       <form @submit.prevent="createProduct">
         <div>
-          <label for="title">Título:</label>
+          <label for="title">Nombre del producto:</label>
           <input type="text" id="title" v-model="title" required />
         </div>
         <div>

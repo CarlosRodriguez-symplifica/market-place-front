@@ -23,7 +23,7 @@
 <script>
 import { ref } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter} from 'vue-router'
+import { useRouter } from 'vue-router'
 
 export default {
   setup() {
@@ -41,12 +41,7 @@ export default {
       const response = await store.dispatch('registerUser', payload)
 
       if (response.success) {
-        router.push({
-          name: 'Home',
-          query: { message: 'Registro exitoso', type: 'success' }
-        })
-      } else {
-
+        router.push('/')
       }
     }
 
@@ -57,6 +52,7 @@ export default {
         if (newFlashMessage) {
           setTimeout(() => {
             flashMessage.value = null
+            store.commit('setFlashMessage', { message: null, type: null })
           }, 4000)
         }
       }

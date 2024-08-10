@@ -1,4 +1,7 @@
 <template>
+  <div v-if="flashMessage" :class="['flash-card', flashMessage.type]">
+    {{ flashMessage.message }}
+  </div>
   <div class="app-container">
     <div class="login">
       <h2>Login</h2>
@@ -28,6 +31,7 @@ export default {
     const router = useRouter()
     const email = ref('')
     const password = ref('')
+    const flashMessage = ref(null)
 
     const login = async () => {
       const payload = {
@@ -41,10 +45,24 @@ export default {
       }
     }
 
+    store.watch(
+      (state) => state.flashMessage,
+      (newFlashMessage) => {
+        flashMessage.value = newFlashMessage
+        if (newFlashMessage) {
+          setTimeout(() => {
+            flashMessage.value = null
+            store.commit('setFlashMessage', { message: null, type: null })
+          }, 4000)
+        }
+      }
+    )
+
     return {
       email,
       password,
-      login
+      login,
+      flashMessage
     }
   }
 }

@@ -27,6 +27,12 @@ export default createStore({
     },
     setFlashMessage(state, { message, type }) {
       state.flashMessage = { message, type }
+
+      if (message) {
+        setTimeout(() => {
+          state.flashMessage = null
+        }, 4000)
+      }
     },
     setToken(state, token) {
       state.token = token
@@ -40,7 +46,7 @@ export default createStore({
   actions: {
     async getProducts({ commit }) {
       try {
-        const response = await fetch('https://market-place-app-xa82.onrender.com/api/v1/products')
+        const response = await fetch('http://localhost:3001/api/v1/products')
         const data = await response.json()
         commit('setProducts', data.data)
         commit('setProductsFilter', data.data)
@@ -61,7 +67,7 @@ export default createStore({
     },
     async registerUser({ commit }, payload) {
       try {
-        const response = await fetch('https://market-place-app-xa82.onrender.com/api/v1/users', {
+        const response = await fetch('http://localhost:3001/api/v1/users', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -76,7 +82,7 @@ export default createStore({
         const data = await response.json();
 
         if (response.ok) {
-          commit('setFlashMessage', { message: 'Registro exitoso...', type: 'success' })
+          commit('setFlashMessage', { message: 'Bienvenido a Market Place App, ¡ya puedes iniciar sesion!', type: 'success' })
           return { success: true }
         } else {
           commit('setFlashMessage', { message: data.email[0] || 'Error en el registro', type: 'error' })
@@ -90,7 +96,7 @@ export default createStore({
     },
     async loginUser({ commit }, payload) {
       try {
-        const response = await fetch('https://market-place-app-xa82.onrender.com/api/v1/tokens', {
+        const response = await fetch('http://localhost:3001/api/v1/tokens', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -102,30 +108,51 @@ export default createStore({
             }
           })
         })
-        const data = await response.json()
+        const responseText = await response.text()
 
-        if (response.ok) {
-          commit('setToken', data.token)
-          commit('setFlashMessage', { message: 'Inicio de sesión exitoso', type: 'success' })
-          return { success: true }
-        } else {
-          console.log('entro aqui')
-          commit('setFlashMessage', { message: 'Error en el inicio de sesión', type: 'error' })
+        if (!response.ok) {
+          let errorMessage = 'Error en el inicio de sesion'
+
+          if (response.status === 401) {
+            errorMessage = 'Credenciales incorrectas, intentalo de nuevo'
+          } else if (response.status >= 500) {
+            errorMessage = 'Error en el servidor. Intente mas tarde.'
+          }
+
+          if (responseText) {
+            try {
+              const errorData = JSON.parse(responseText)
+              console.log('*************************')
+              console.log(response)
+              console.log(errorData)
+              console.log('*************************')
+            } catch (parseError) {
+              console.log('No se pudo parsear el cuerpo de la respuesta:', responseText)
+            }
+          } else {
+            console.log('La respuesta no tiene cuerpo.')
+          }
+
+          commit('setFlashMessage', { message: errorMessage, type: 'error' })
           return { success: false }
         }
+        const data = JSON.parse(responseText)
+
+        commit('setToken', data.token)
+        commit('setFlashMessage', { message: `Bienvendido de nuevo ${data.email}`, type: 'success' })
+        return { success: true }
       } catch (error) {
-        console.log(error)
         commit('setFlashMessage', { message: 'Error en la solicitud', type: 'error' })
         return { success: false }
       }
     },
     logout({ commit }) {
       commit('removeToken')
-      commit('setFlashMessage', { message: 'Sesión cerrada', type: 'success' })
+      commit('setFlashMessage', { message: '¡Gracias!, Hasta luego', type: 'success' })
     },
     async createProductAction({ commit, state }, { product, token }) {
       try {
-        const response = await fetch('https://market-place-app-xa82.onrender.com/api/v1/products', {
+        const response = await fetch('http://localhost:3001/api/v1/products', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
